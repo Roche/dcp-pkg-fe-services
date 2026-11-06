@@ -1,0 +1,50 @@
+{
+  "name": "@open-dcp/services",
+  "version": "1.1.4",
+  "engines": {
+    "node": ">=18.8.0"
+  },
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "concurrently \"tsc --watch\" \"tsc-alias --watch\"",
+    "prebuild": "node scripts/generate-version.js",
+    "build": "tsc && tsc-alias",
+    "build:local": "tsc && tsc-alias",
+    "test": "jest",
+    "compatibility": "node scripts/check-compatibility.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "concurrently": "^9.2.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^22.1.0",
+    "ts-jest": "^29.4.4",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "jwt-decode": "^4.0.0",
+    "tar": "^7.5.1",
+    "tslib": "^2.8.1"
+  },
+  "peerDependencies": {
+    "@open-dcp/utilities": ">=0.0.1",
+    "rxjs": ">=7.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Roche/dcp-pkg-fe-services.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

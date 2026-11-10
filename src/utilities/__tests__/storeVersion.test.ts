@@ -56,4 +56,24 @@ describe('StoreVersion', () => {
         expect(new StoreVersion('1.2.3-alpha').compareTo(new StoreVersion('1.2.3-alpha'))).toBe(0);
         expect(new StoreVersion('1.2.3-beta').compareTo(new StoreVersion('1.2.3-beta'))).toBe(0);
     });
+
+    it('compares numeric pre-release identifiers numerically, not lexically', () => {
+        expect(new StoreVersion('1.2.3-alpha.2').compareTo(new StoreVersion('1.2.3-alpha.10'))).toBe(-1);
+        expect(new StoreVersion('1.2.3-alpha.10').compareTo(new StoreVersion('1.2.3-alpha.2'))).toBe(1);
+        expect(new StoreVersion('1.2.3-alpha.2').compareTo(new StoreVersion('1.2.3-alpha.2'))).toBe(0);
+    });
+
+    it('treats a pre-release with more identifiers as greater when the shared prefix is equal', () => {
+        expect(new StoreVersion('1.2.3-alpha.1.1').compareTo(new StoreVersion('1.2.3-alpha.1'))).toBe(1);
+        expect(new StoreVersion('1.2.3-alpha.1').compareTo(new StoreVersion('1.2.3-alpha.1.1'))).toBe(-1);
+    });
+
+    it('matches the real-world backward compatibility scenario', () => {
+        // VERSION = '1.2.0-alpha.2' introduced alongside stable 1.1.x/1.0.x releases
+        expect(new StoreVersion('1.2.0-alpha.2').compareTo(new StoreVersion('1.2.0-alpha.1'))).toBe(1);
+        expect(new StoreVersion('1.2.0-alpha.1').compareTo(new StoreVersion('1.2.0-alpha.2'))).toBe(-1);
+        expect(new StoreVersion('1.2.0-alpha.2').compareTo(new StoreVersion('1.1.4'))).toBe(1);
+        expect(new StoreVersion('1.1.4').compareTo(new StoreVersion('1.0.5'))).toBe(1);
+        expect(new StoreVersion('1.2.0-alpha.2').compareTo(new StoreVersion('1.0.0'))).toBe(1);
+    });
 });

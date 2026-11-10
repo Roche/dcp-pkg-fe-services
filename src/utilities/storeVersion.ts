@@ -20,7 +20,33 @@ class StoreVersion {
         if (aIndex !== -1 && bIndex !== -1 && aIndex !== bIndex) {
             return aIndex > bIndex ? -1 : 1;
         }
-        return a > b ? 1 : -1;
+        return StoreVersion.comparePreReleaseIdentifiers(a, b);
+    }
+
+    // Compares dot-separated identifiers, treating numeric segments numerically (e.g. "alpha.10" > "alpha.2")
+    private static comparePreReleaseIdentifiers(a: string, b: string): number {
+        const aParts = a.split('.');
+        const bParts = b.split('.');
+        const maxLen = Math.max(aParts.length, bParts.length);
+
+        for (let i = 0; i < maxLen; i++) {
+            const aPart = aParts[i];
+            const bPart = bParts[i];
+            if (aPart === bPart) continue;
+            if (aPart === undefined) return -1;
+            if (bPart === undefined) return 1;
+
+            const aIsNum = aPart !== '' && !Number.isNaN(Number(aPart));
+            const bIsNum = bPart !== '' && !Number.isNaN(Number(bPart));
+
+            if (aIsNum && bIsNum) {
+                if (Number(aPart) !== Number(bPart)) return Number(aPart) > Number(bPart) ? 1 : -1;
+                continue;
+            }
+            if (aIsNum !== bIsNum) return aIsNum ? -1 : 1;
+            return aPart > bPart ? 1 : -1;
+        }
+        return 0;
     }
 
     compareTo(v: StoreVersion) {

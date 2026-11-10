@@ -18,7 +18,7 @@ const { version } = require('../package.json');
 
 const CI_PROJECT_ID = process.env.CI_PROJECT_ID;
 const CI_API_V4_URL = process.env.CI_API_V4_URL;
-const MAXIMUM_VERSIONS = 15;
+const MAXIMUM_VERSIONS = 20;
 const requestedVersion = process.argv[2] ?? null;
 
 function getGitlabAuthHeader() {
